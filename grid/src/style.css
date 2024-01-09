@@ -1,0 +1,40 @@
+* {
+    font-family: Arial;
+}
+
+:root {
+    --nb-col: 0;
+    --nb-lig: 0;
+}
+
+.controls {
+    display: grid;
+    width: fit-content;
+}
+
+.controls .inpout-group {
+    display: flex;
+    gap: 20px;
+}
+
+.grid {
+    margin-top: 10px;
+    width: fit-content;
+    display: grid;
+    grid-template-columns: repeat(var(--nb-col), 1fr);
+    grid-template-rows: repeat(var(--nb-lig), 1fr);
+}
+
+.cell {
+    padding: 10px;
+    border: 1px solid black;
+    width: fit-content;
+}
+
+.cell.selected {
+    background: lightgreen;
+}
+
+button {
+    margin-top: 10px;
+}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <title>Grid</title>
+  </head>
+  <body>
+    <div class="controls">
+      <div class="inpout-group">
+        <input id="nbcol" name="nbcol" type="range" min="1" max="20" step="1" value="9"/>
+        <label for="nbcol">Nombre de colonnes (<span id="value_col"></span>)</label>
+      </div>
+      <div class="inpout-group">
+        <input id="nbl" name="nbl" type="range" min="1" max="20" step="1" value="7"/>
+        <label for="nbl">Nombre de lignes (<span id="value_lig"></span>)</label>
+      </div>
+    </div>
+    <div class="grid">
+    </div>
+    <button>Choisir case aléatoire</button>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
