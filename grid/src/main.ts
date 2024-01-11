@@ -30,66 +30,126 @@ function replaceCells(amount: number, where: HTMLDivElement) {
   }
 }
 
+function createFixedCells(): {
+  start: number;
+  top: number;
+  middle: number;
+  bottom: number;
+} {
+  const nbLig = parseInt(inputRangeLigne.value);
+  const nbCol = parseInt(inputRangeCol.value);
+
+  const startCell = ((nbLig - 1) / 2) * nbCol + 1;
+
+  const treasureCellMiddle = ((nbLig + 1) / 2) * nbCol;
+
+  const treasureCellTop = nbCol;
+
+  const treasureCellBottom = nbCol * nbLig;
+
+  const cells = document.querySelectorAll(".cell") as NodeListOf<HTMLElement>;
+
+  cells.forEach((cell: HTMLElement, i) => {
+    if (
+      [
+        startCell,
+        treasureCellMiddle,
+        treasureCellTop,
+        treasureCellBottom,
+      ].includes(i + 1)
+    ) {
+      cell.style.backgroundColor = "black";
+    }
+  });
+
+  return {
+    start: startCell,
+    top: treasureCellTop,
+    middle: treasureCellMiddle,
+    bottom: treasureCellBottom,
+  };
+}
+
 function randomIntFromInterval(min: number, max: number) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 const grid = document.querySelector(".grid")! as HTMLDivElement;
-replaceCells(
-  parseInt(inputRangeCol.value) * parseInt(inputRangeLigne.value),
-  grid
-);
-setNbColCss(rootStyleElem, parseInt(inputRangeCol.value));
-setNbRowCss(rootStyleElem, parseInt(inputRangeLigne.value));
 
-inputRangeCol.addEventListener("change", () => {
-  afficherValueCol.innerText = inputRangeCol.value;
+function redraw() {
   setNbColCss(rootStyleElem, parseInt(inputRangeCol.value));
-  replaceCells(
-    parseInt(inputRangeCol.value) * parseInt(inputRangeLigne.value),
-    grid
-  );
-});
-
-inputRangeLigne.addEventListener("change", () => {
-  afficherValueLigne.innerText = inputRangeLigne.value;
   setNbRowCss(rootStyleElem, parseInt(inputRangeLigne.value));
   replaceCells(
     parseInt(inputRangeCol.value) * parseInt(inputRangeLigne.value),
     grid
   );
+  createFixedCells();
+}
+redraw();
+
+inputRangeCol.addEventListener("change", () => {
+  afficherValueCol.innerText = inputRangeCol.value;
+  redraw();
 });
 
-const caseBtn = document.querySelector("button")!;
-caseBtn.addEventListener("click", () => {
-  const cells = document.querySelectorAll(".cell")!;
-  cells.forEach((cell) => {
-    cell.classList.remove("selected");
+inputRangeLigne.addEventListener("change", () => {
+  afficherValueLigne.innerText = inputRangeLigne.value;
+  redraw();
+});
+
+const btnTombeCaillou = document.getElementById("btncaill");
+const btnObjectifs = document.getElementById("btnobj");
+
+btnObjectifs?.addEventListener("click", () => {
+  redraw();
+  let reservedPos = [...Object.values(createFixedCells())];
+  let objectivesPos: Array<number> = [];
+
+  while (objectivesPos.length < 9) {
+    let rdmPos = -1;
+
+    while (
+      reservedPos.includes(rdmPos) ||
+      objectivesPos.includes(rdmPos) ||
+      rdmPos === -1
+    ) {
+      rdmPos = randomIntFromInterval(
+        1,
+        parseInt(inputRangeCol.value) * parseInt(inputRangeLigne.value)
+      );
+    }
+
+    objectivesPos.push(rdmPos);
+  }
+
+  const cells = document.querySelectorAll(".cell") as NodeListOf<HTMLElement>;
+  objectivesPos.forEach((n) => {
+    cells[n - 1].style.backgroundColor = "red";
   });
-  let curr = randomIntFromInterval(0, cells.length - 1);
-  cells[curr].classList.add("selected");
-  setTimeout(() => {
-    cells[curr].classList.remove("selected");
-    curr = randomIntFromInterval(0, cells.length);
-    cells[curr].classList.add("selected");
+});
 
-    setTimeout(() => {
-      cells[curr].classList.remove("selected");
-      curr = randomIntFromInterval(0, cells.length);
-      cells[curr].classList.add("selected");
+btnTombeCaillou?.addEventListener("click", async () => {
+  let rdmPos = -1;
+  redraw();
 
-      setTimeout(() => {
-        cells[curr].classList.remove("selected");
-        curr = randomIntFromInterval(0, cells.length);
-        cells[curr].classList.add("selected");
+  while (
+    Object.values(createFixedCells()).includes(rdmPos + 1) ||
+    rdmPos === -1
+  ) {
+    rdmPos = randomIntFromInterval(
+      1,
+      parseInt(inputRangeCol.value) * parseInt(inputRangeLigne.value)
+    );
+    console.log("passé");
+  }
 
-        setTimeout(() => {
-          cells[curr].classList.remove("selected");
-          curr = randomIntFromInterval(0, cells.length);
-          cells[curr].classList.add("selected");
-        }, 200);
-      }, 200);
-    }, 200);
-  }, 200);
+  const cells = document.querySelectorAll(".cell") as NodeListOf<HTMLElement>;
+
+  if (!cells[rdmPos]) {
+    btnTombeCaillou.dispatchEvent(new Event("click"));
+    return;
+  }
+
+  cells[rdmPos].style.backgroundColor = "#1eaaf1";
 });
