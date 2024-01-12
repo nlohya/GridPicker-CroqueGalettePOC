@@ -1,40 +1,48 @@
 * {
-    font-family: Arial;
+  font-family: Arial;
 }
 
 :root {
-    --nb-col: 0;
-    --nb-lig: 0;
+  --nb-col: 0;
+  --nb-lig: 0;
 }
 
 .controls {
-    display: grid;
-    width: fit-content;
+  display: grid;
+  width: fit-content;
 }
 
 .controls .inpout-group {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .grid {
-    margin-top: 10px;
-    width: fit-content;
-    display: grid;
-    grid-template-columns: repeat(var(--nb-col), 1fr);
-    grid-template-rows: repeat(var(--nb-lig), 1fr);
+  margin-top: 10px;
+  gap: 1px;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(var(--nb-col), 1fr);
+  grid-template-rows: repeat(var(--nb-lig), 1fr);
 }
 
 .cell {
-    padding: 10px;
-    border: 1px solid black;
-    width: fit-content;
+  padding: 10px;
+  padding-block: 16px;
+  border: 1px dotted black;
+  width: fit-content;
 }
 
 .cell.selected {
-    background: lightgreen;
+  background: lightgreen;
 }
 
 button {
-    margin-top: 10px;
+  margin-top: 10px;
+  background: black;
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px 3px;
+  display: block;
 }
